@@ -26,16 +26,19 @@ function resolveRemoveResolutions(source) {
     return [];
   }
 
-  if (resolutions.filter((a) => a.endsWith("1440")).length > 0) {
-    let removeed = resolutions.filter((a) => {
-      const height = a.split("x")[1];
-      if (Number(height) < 1440) {
-        return true;
-      }
-      return false;
-    });
-    return removeed;
-  }
+  /*
+   * 低端设备上通过 Developer app 无法播放音频
+   */
+  // if (resolutions.filter((a) => a.endsWith("1440")).length > 0) {
+  //   let removeed = resolutions.filter((a) => {
+  //     const height = a.split("x")[1];
+  //     if (Number(height) < 1440) {
+  //       return true;
+  //     }
+  //     return false;
+  //   });
+  //   return removeed;
+  // }
 
   if (resolutions.filter((a) => a.endsWith("1080")).length > 0) {
     let removeed = resolutions.filter((a) => {
