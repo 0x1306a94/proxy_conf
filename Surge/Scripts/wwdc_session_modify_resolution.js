@@ -9,6 +9,7 @@ https://devstreaming-cdn.apple.com/videos/wwdc/2020/10970/2/E58549F7-1B89-47E6-B
 https://devstreaming-cdn.apple.com/videos/wwdc/2021/10308/18/BA664ADF-042F-4084-8565-61FC83578C92/cmaf.m3u8?8050
 https://devstreaming-cdn.apple.com/videos/wwdc/2022/10110/3/9DDED4EB-547B-46DD-AEE5-9D3F2C60CFF8/cmaf.m3u8?55450
 https://devstreaming-cdn.apple.com/videos/wwdc/2023/10036/4/BB960BFD-F982-4800-8060-5674B049AC5A/cmaf.m3u8?33690
+https://devstreaming-cdn.apple.com/videos/tech-talks/111378/1/9C6D10DC-D9D4-43E8-BF45-A2DCB3A9CD0E/cmaf.m3u8
 
 surge script
 pattern=devstreaming-cdn\.apple\.com\/videos\/(wwdc|tech-talks)\/.*\/(ipad_c|cmaf|hls_vod_mvp|master)\.m3u8
