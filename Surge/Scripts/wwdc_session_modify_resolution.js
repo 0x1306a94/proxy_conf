@@ -11,7 +11,7 @@ https://devstreaming-cdn.apple.com/videos/wwdc/2022/10110/3/9DDED4EB-547B-46DD-A
 https://devstreaming-cdn.apple.com/videos/wwdc/2023/10036/4/BB960BFD-F982-4800-8060-5674B049AC5A/cmaf.m3u8?33690
 
 surge script
-pattern=devstreaming-cdn\.apple\.com\/videos\/wwdc\/.*\/(ipad_c|cmaf|hls_vod_mvp|master)\.m3u8
+pattern=devstreaming-cdn\.apple\.com\/videos\/(wwdc|tech-talks)\/.*\/(ipad_c|cmaf|hls_vod_mvp|master)\.m3u8
 */
 
 function resolveRemoveResolutions(source) {
