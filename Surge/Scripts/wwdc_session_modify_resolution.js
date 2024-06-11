@@ -14,38 +14,54 @@ surge script
 pattern=devstreaming-cdn\.apple\.com\/videos\/wwdc\/.*\/(ipad_c|cmaf|hls_vod_mvp|master)\.m3u8
 */
 
-function resolveKeepResolutions(source) {
-  const widths = source
-    .match(/RESOLUTION=(\d+)/g)
-    .map((a) => a.replace("RESOLUTION=", ""))
-    .map((a) => Number(a))
-    .sort((a, b) => a - b);
+function resolveRemoveResolutions(source) {
+  let resolutions = source
+    .match(/RESOLUTION=(\d+x\d+)/g)
+    .map((a) => a.replace("RESOLUTION=", ""));
 
-  if (widths.length == 0) {
+  resolutions = [...new Set(resolutions)];
+
+  if (resolutions.length == 0) {
     return [];
   }
 
-  const mediumWidths = widths.filter((a) => a >= 1280);
-  const highWidths = widths.filter((a) => a >= 1920);
-  if (
-    mediumWidths.length == widths.length ||
-    highWidths.length == widths.length
-  ) {
-    return [];
+  if (resolutions.filter((a) => a.endsWith("1440")).length > 0) {
+    let removeed = resolutions.filter((a) => {
+      const height = a.split("x")[1];
+      if (Number(height) < 1440) {
+        return true;
+      }
+      return false;
+    });
+    return removeed;
   }
 
-  if (highWidths.length > 0) {
-    return ["1920x1080", "2560x1440", "3840x2160"];
+  if (resolutions.filter((a) => a.endsWith("1080")).length > 0) {
+    let removeed = resolutions.filter((a) => {
+      const height = a.split("x")[1];
+      if (Number(height) < 1080) {
+        return true;
+      }
+      return false;
+    });
+    return removeed;
   }
 
-  if (mediumWidths.length > 0) {
-    return ["1280x720", "1920x1080", "2560x1440", "3840x2160"];
+  if (resolutions.filter((a) => a.endsWith("720")).length > 0) {
+    let removeed = resolutions.filter((a) => {
+      const height = a.split("x")[1];
+      if (Number(height) < 720) {
+        return true;
+      }
+      return false;
+    });
+    return removeed;
   }
 
   return [];
 }
 
-function modify(source, keepResolutions) {
+function modify(source, removeResolutions) {
   const resolutionPattern = /RESOLUTION=(\d+x\d+)/;
   const lines = source.split("\n");
   let modifyBody = "";
@@ -56,15 +72,15 @@ function modify(source, keepResolutions) {
     const match = line.match(resolutionPattern);
     if (match) {
       const resolution = match[1];
-      if (keepResolutions.includes(resolution)) {
-        modifyBody += line + "\n";
-      } else {
+      if (removeResolutions.includes(resolution)) {
         if (index + 1 < len && !lines[index + 1].startsWith("#")) {
           index += 2;
         } else {
           index++;
         }
         continue;
+      } else {
+        modifyBody += line + "\n";
       }
     } else {
       modifyBody += line + "\n";
@@ -77,12 +93,12 @@ function modify(source, keepResolutions) {
 
 let headers = $response.headers;
 let body = $response.body;
-const keepResolutions = resolveKeepResolutions(body);
-if (keepResolutions.length == 0) {
+const removeResolutions = resolveRemoveResolutions(body);
+if (removeResolutions.length == 0) {
   headers["x-modified-status"] = "0";
   $done({ headers: headers });
 } else {
-  const modifyBody = modify(body, keepResolutions);
+  const modifyBody = modify(body, removeResolutions);
   headers["x-modified-status"] = "1";
   $done({ body: modifyBody, headers: headers });
 }
